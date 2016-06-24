@@ -5,9 +5,7 @@ Purpose
 This project is designed to control a chicken coop door.
 
 Functionality
-The door will automatically open when there is light outside.  It will close when it becomes dark.  There will be a button which will be a manual override for opening or 
-
-closing the door.
+The door will automatically open when there is light outside.  It will close when it becomes dark.  There will be a button which will be a manual override for opening or closing the door.
 
 Sensors and actuators
 -light sensing device to check whether it is day or night
