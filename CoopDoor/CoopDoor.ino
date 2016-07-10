@@ -8,14 +8,12 @@
  * 3 - Door Closed Endstop
  * 4 - Door Open Endstop
  */
- #define lightSense 8
+ #define lightSense 7
  #define swMan 4
  #define swClosed 5
  #define swOpen 6
 
 /* OUTPUTS
- * 1 - Output for relay 1  
- * 2 - Output for relay 2
  */
  #define relay1 2
  #define relay2 3
@@ -38,6 +36,8 @@ void setup() {
   digitalWrite(relay1, HIGH);
   pinMode(relay2, OUTPUT);
   digitalWrite(relay2, HIGH);
+
+  lightChange = 0;
 
   //debug code
   Serial.begin(9600);
@@ -71,26 +71,30 @@ void loop() {
             break;
        }
        //software debounce the pushbutton
-       delay(100);
+       delay(200);
        lightChange = 0;
        lightDetected = 0;
   }
   else if(closing || opening){
     if((closing && !digitalRead(swClosed)) || (opening && !digitalRead(swOpen)) || (millis() - timeOut > 10000)){
       stopDoor();
-      //software debounce the switch
-      delay(50);
     }
   }
-  else if((!digitalRead(lightSense) != currentState) && (currentState != 2)){
+  else if((digitalRead(lightSense) != currentState) && (currentState != 2)){
     if(!lightDetected){
       lightTimer = millis();
+      lightDetected = 1;
+      
+      //debug code
+      Serial.println("The light output state has changed from the current state of the door");
     }
-    lightDetected = 1;
     //10 minute time delay = 360000
     if(millis() - lightTimer > 360000){
       lightChange = 1;
     }
+  }
+  else{
+    lightDetected = 0;
   }
 }
 
